@@ -102,13 +102,13 @@ body {
 }
 
 #load-more {
+  display: none;
   font-weight: 500;
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.04em;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
-  display: flex;
   justify-self: center;
   border-radius: 8px;
   padding: 8px 16px;
