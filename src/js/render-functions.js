@@ -18,8 +18,10 @@ export function renderImages(images) {
   `).join('');
   gallery.insertAdjacentHTML('beforeend', markup);
 
-  const lightbox = new SimpleLightbox('.gallery a');
-  lightbox.refresh();
+  if (window.lightbox) {
+    window.lightbox.destroy();
+  }
+  window.lightbox = new SimpleLightbox('.gallery a');
 }
 
 export function clearGallery() {

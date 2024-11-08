@@ -1,12 +1,18 @@
 import { fetchImages, resetPage } from './js/pixabay-api.js';
 import { renderImages, clearGallery } from './js/render-functions.js';
 import iziToast from 'izitoast';
+import SimpleLightbox from 'simplelightbox';
 import 'izitoast/dist/css/iziToast.min.css';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('#search-form');
 const loadMoreBtn = document.querySelector('#load-more');
 const loader = document.querySelector('#loader');
 let currentQuery = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.lightbox = new SimpleLightbox('.gallery a');
+});
 
 function showLoader() {
   loader.style.display = 'block';
@@ -38,6 +44,7 @@ form.addEventListener('submit', async (event) => {
       iziToast.info({ title: 'Info', message: 'Sorry, there are no images matching your search query. Please try again!' });
     } else {
       renderImages(images);
+      window.lightbox.refresh();
       loadMoreBtn.style.display = 'block';
     }
   } catch (error) {
@@ -54,18 +61,18 @@ loadMoreBtn.addEventListener('click', async () => {
     const images = await fetchImages(currentQuery);
     console.log('Завантаження додаткових зображень', images);
     renderImages(images);
-    
+
     if (images.length < 15) {
       loadMoreBtn.style.display = 'none';
       iziToast.info({ title: 'Info', message: "We're sorry, but you've reached the end of search results." });
     }
-    
+
     const { height: cardHeight } = document.querySelector('.gallery').firstElementChild.getBoundingClientRect();
     window.scrollBy({
       top: cardHeight * 2,
       behavior: 'smooth',
     });
-    
+
   } catch (error) {
     iziToast.error({ title: 'Error', message: 'Something went wrong. Please try again later!' });
   } finally {
